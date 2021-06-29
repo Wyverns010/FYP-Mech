@@ -1,6 +1,8 @@
+import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// Performs Ackerman's Visualization
 class Visualizer extends StatefulWidget {
   final String mechName;
   final String imageData;
@@ -16,6 +18,13 @@ class _VisualizerState extends State<Visualizer> {
   var widthOfScreen;
   String defaultImage = 'https://www.w3schools.com/w3css/img_lights.jpg';
   String imageURL;
+  // phi, theta, a, b
+  List<dynamic> _values = [null,null,null,null];
+  var textControllerPhi = new TextEditingController();
+  var textControllerTheta = new TextEditingController();
+  var textControllerA = new TextEditingController();
+  var textControllerB = new TextEditingController();
+
 
   // @override
   // void initState() {
@@ -59,42 +68,57 @@ class _VisualizerState extends State<Visualizer> {
                   ),
                 )),
 
-            // CompanyStatsBar(
-            //   companyNameForSubtitle: model.stocks[widget.symbol].symbol,
-            //   name: model.stocks[widget.symbol].name,
-            //   imageUrlForCircularAvatar: imageURL ??
-            //       'https://www.w3schools.com/w3css/img_lights.jpg',
-            //   info: model.stocks[widget.symbol].description ?? "desc goes here",
-            // ),
             Container(
               padding: EdgeInsets.fromLTRB(100, 20, 100, 20),
               height: 80.0,
               width: double.maxFinite,
-              child: RaisedButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                // onPressed: () async {
-                //   if (_formKey.currentState.validate()) {
-                //     dynamic user =
-                //         await _auth.emailSignIn(_email, _password);
-                //     if (user == null) {
-                //       _toastSnackBar(context,
-                //           'The entered email/password is incorrect');
-                //       setState(() {
-                //         // error =
-                //         //     'The entered email/password is incorrect';
-                //       });
-                //     } else {
-                //       SchedulerBinding.instance
-                //           .addPostFrameCallback((_) async {
-                //         Navigator.pushNamedAndRemoveUntil(context,
-                //             '/', (Route<dynamic> route) => false);
-                //       });
-                //     }
-                //   }
-                // },
-                padding: EdgeInsets.all(0.0),
+              child: ElevatedButton(
+                // shape: RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(5.0),
+                // ),
+                onPressed: () {
+                  int count = 0;
+                  int calcPos = 3;
+                  for(int i;i<_values.length;i++) {
+                    if(_values[i] == null) {
+                      count += 1;
+                      calcPos = i;
+                    }
+                  }
+
+                  if(count > 1) {
+                    GlobalAlertDialog.dialogBox(
+                          context,
+                          'Warning!',
+                          'Please fill any three values to visualize');
+                  }
+                else {
+                    if(calcPos == 0) {
+                      _values[0] = math.atan(1/(_values[2]/_values[3] - 1/math.tan(_values[1]*math.pi/180)));
+                      textControllerPhi.text = _values[0];
+                      _values = [null,null,null,null];
+                //       // setup text controller for updating value as degree
+                    }
+                    if(calcPos == 1) {
+                      _values[1] = math.atan(1/math.tan(_values[0]*math.pi/180) - 1/(_values[2]/_values[3]));
+                      textControllerTheta.text = _values[1];
+                      _values = [null,null,null,null];
+                      // setup text controller for updating value as degree
+                    }
+                    if(calcPos == 2) {
+                      _values[2] = _values[3]*(1/math.tan(_values[0]*math.pi/180) - 1/math.tan(_values[1]*math.pi/180));
+                      textControllerA.text = _values[2];
+                      _values = [null,null,null,null];
+                    }
+                    if(calcPos == 3) {
+                      _values[3] = _values[2]/(1/math.tan(_values[0]*math.pi/180) - 1/math.tan(_values[1]*math.pi/180));
+                      textControllerB.text = _values[3];
+                      _values = [null,null,null,null];
+                    }
+                  }
+
+                },
+                // padding: EdgeInsets.all(0.0),
                 child: Ink(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5.0),
@@ -165,49 +189,38 @@ class _VisualizerState extends State<Visualizer> {
                   ),
                 ),
               ),
-            ListItem(
+            inputBuilder(
+              context,
               title: 'phi',
-              value: 0,
+              value: null,
+              pos: 0,
+              textController: textControllerPhi
             ),
             SizedBox(height: 5),
-            ListItem(
+            inputBuilder(
+              context,
               title: 'Theta',
-              value: 0,
+              value: null,
+              pos: 0,
+              textController: textControllerTheta
             ),
             SizedBox(height: 5),
-            ListItem(
+            inputBuilder(
+              context,
               title: 'a',
-              value: 1,
+              value: null,
+              pos: 0,
+              textController: textControllerA
             ),
             SizedBox(height: 5),
-            ListItem(
+            inputBuilder(
+              context,
               title: 'b',
-              value: 1,
+              value: null,
+              pos: 0,
+              textController: textControllerB
             ),
             SizedBox(height: 5),
-            // ListItem(
-            //   title: 'Close',
-            //   value: model.stocks[widget.symbol].latestData['close'],
-            // ),
-
-            // ListItem(
-            //   title: '% Change 1min',
-            //   value: double.parse(model.stocks[widget.symbol].change_1min).toStringAsFixed(5),
-            //   isPercentListTile: true,
-            // ),
-            // ListItem(
-            //   title: 'Percent Change 24h',
-            //   value: snap.oneDayChange,
-            //   isPercentListTile: true,
-            // ),
-            // ListItem(
-            //   title: 'Percent Change 7d',
-            //   value: snap.sevenDayChange,
-            //   isPercentListTile: true,
-            // ),
-            // ListItem(title: 'Type', value: model.stocks[widget.symbol].type),
-            // ListItem(title: 'Market 24h', value: snap.marketTwentyFourHour),
-            // ListItem(title: 'Exchange', value: model.stocks[widget.symbol].exchange),
             // Center(
             //   child: Padding(
             //     padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -232,6 +245,74 @@ class _VisualizerState extends State<Visualizer> {
             // ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget inputBuilder(BuildContext context,{String title, dynamic value, int pos, TextEditingController textController}) {
+    return Container(
+      color: Theme.of(context).accentColor,
+      padding: EdgeInsets.all(5),
+      child: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10),
+            child:TextFormField(
+                        controller: textController,
+                        initialValue: value,
+                        obscureText: false,
+                        // validator: (value) =>
+                        //     value.isEmpty ? 'Enter your email' : null,
+                        onChanged: (val) {
+                          setState(() {
+                            _values[pos] = val;
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          labelText: title,
+                          labelStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        textAlign: TextAlign.left,
+                      ),),
+          // ListTile(
+          //   title: Text(
+          //     title,
+          //     style: TextStyle(fontWeight: FontWeight.w500),
+          //   ),
+          //   trailing: FittedBox(
+          //     child: Row(
+          //       children: [
+          //         // if (isPercentListTile) ...[
+          //         //   Icon(
+          //         //     double.parse(value) >= 0
+          //         //         ? Icons.camera_front
+          //         //         : Icons.camera_rear,
+          //         //     color:
+          //         //         double.parse(value) >= 0 ? Colors.green : Colors.red,
+          //         //   )
+          //         // ],
+          //         SizedBox(
+          //           width: 10,
+          //         ),
+          //         Text(
+          //           value.toString(),
+          //           style: TextStyle(
+          //               color: Theme.of(context).appBarTheme.color,
+          //               fontSize: 16),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 15),
+          //   child: Divider(),
+          // )
+        ],
       ),
     );
   }
@@ -359,45 +440,7 @@ class _VisualizerState extends State<Visualizer> {
   }
 }
 
-// class CompanyStatsBar extends StatelessWidget {
-//   final String name;
-//   final String imageUrlForCircularAvatar;
-//   final String companyNameForSubtitle;
-//   final String info;
 
-//   const CompanyStatsBar(
-//       {Key key,
-//       this.name,
-//       this.imageUrlForCircularAvatar,
-//       this.companyNameForSubtitle,
-//       this.info})
-//       : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       color: Colors.black87,
-//       child: Padding(
-//         padding: const EdgeInsets.all(10.0),
-//         child: ListTile(
-//           leading: CircleAvatar(
-//             backgroundImage: NetworkImage(imageUrlForCircularAvatar),
-//           ),
-//           title: Text(name + ' (' + companyNameForSubtitle + ')',
-//               style: TextStyle(
-//                   color: Colors.white,
-//                   fontSize: 26,
-//                   fontWeight: FontWeight.bold)),
-//           trailing: IconButton(
-//               icon: Icon(Icons.info, color: Colors.white),
-//               onPressed: () => GlobalAlertDialog.dialogBox(
-//                   context,
-//                   name,
-//                   info)),
-//         ),
-//       ),
-//     );
-//   }
-// }
 
 class GlobalAlertDialog {
   static Future dialogBox(
@@ -422,84 +465,8 @@ class GlobalAlertDialog {
   }
 }
 
-class ListItem extends StatelessWidget {
-  final String title;
-  final value;
-  final bool isPercentListTile;
-
-  ListItem(
-      {@required this.title,
-      @required this.value,
-      this.isPercentListTile = false});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).accentColor,
-      padding: EdgeInsets.all(5),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.all(10),
-            child:TextFormField(
-                        initialValue: value.toString(),
-                        obscureText: false,
-                        // validator: (value) =>
-                        //     value.isEmpty ? 'Enter your email' : null,
-                        // onChanged: (val) {
-                        //   setState(() {
-                        //     _email = val;
-                        //   });
-                        // },
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          labelText: title,
-                          labelStyle: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        textAlign: TextAlign.left,
-                      ),),
-          // ListTile(
-          //   title: Text(
-          //     title,
-          //     style: TextStyle(fontWeight: FontWeight.w500),
-          //   ),
-          //   trailing: FittedBox(
-          //     child: Row(
-          //       children: [
-          //         // if (isPercentListTile) ...[
-          //         //   Icon(
-          //         //     double.parse(value) >= 0
-          //         //         ? Icons.camera_front
-          //         //         : Icons.camera_rear,
-          //         //     color:
-          //         //         double.parse(value) >= 0 ? Colors.green : Colors.red,
-          //         //   )
-          //         // ],
-          //         SizedBox(
-          //           width: 10,
-          //         ),
-          //         Text(
-          //           value.toString(),
-          //           style: TextStyle(
-          //               color: Theme.of(context).appBarTheme.color,
-          //               fontSize: 16),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 15),
-          //   child: Divider(),
-          // )
-        ],
-      ),
-    );
-  }
-}
+  
+  
 
 // class CustomDropDownbutton extends StatelessWidget {
 //   final DropdownButton dropDownButton;
