@@ -1,29 +1,30 @@
+// universal joint mechanism
 import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 /// Performs Ackerman's Visualization
-class Visualizer extends StatefulWidget {
+class VisualizerUJM extends StatefulWidget {
   final String mechName;
   final String imageData;
 
-  Visualizer({@required this.mechName, this.imageData});
+  VisualizerUJM({@required this.mechName, this.imageData});
 
   @override
   _VisualizerState createState() => _VisualizerState();
 }
 
-class _VisualizerState extends State<Visualizer> {
+class _VisualizerState extends State<VisualizerUJM> {
   var heightOfScreen;
   var widthOfScreen;
   String defaultImage = 'https://www.w3schools.com/w3css/img_lights.jpg';
   String imageURL;
-  // phi, theta, a, b
-  List<dynamic> _values = [null, null, null, null];
-  var textControllerPhi = new TextEditingController();
-  var textControllerTheta = new TextEditingController();
-  var textControllerA = new TextEditingController();
-  var textControllerB = new TextEditingController();
+  // r1, r2, beta
+  List<dynamic> _values = [null, null, null];
+  var textControllerR1 = new TextEditingController();
+  var textControllerR2 = new TextEditingController();
+  var textControllerBeta = new TextEditingController();
+  
 
   // @override
   // void initState() {
@@ -79,7 +80,7 @@ class _VisualizerState extends State<Visualizer> {
                   print('listValues ' + _values.toString());
                   int count = 0;
                   int calcPos = 3;
-                  for (int i = 0; i < 4; i++) {
+                  for (int i = 0; i < 3; i++) {
                     if (_values[i] == null) {
                       count += 1;
                       calcPos = i;
@@ -92,36 +93,20 @@ class _VisualizerState extends State<Visualizer> {
                   } else {
                     print('calcPos ' + calcPos.toString());
                     if (calcPos == 0) {
-                      _values[0] = math.atan(1 /
-                          (_values[2] / _values[3] -
-                              1 / math.tan(_values[1] * math.pi / 180)))*180/math.pi;
-                      textControllerPhi.text = _values[0].toString();
+                      _values[0] = math.atan(math.cos(_values[2]*math.pi/180)*math.tan(_values[1]*math.pi/180))*180/math.pi;
+                      textControllerR1.text = _values[0].toString();
                       _values = [null, null, null, null];
-                      //       // setup text controller for updating value as degree
+                     
                     }
                     if (calcPos == 1) {
-                      _values[1] = math.atan(
-                          1 / math.tan(_values[0] * math.pi / 180) -
-                              1 / (_values[2] / _values[3]))*180/math.pi;
-                      textControllerTheta.text = _values[1].toString();
+                      _values[1] = math.atan(math.tan(_values[0]*math.pi/180)/math.cos(_values[2]*math.pi/180))*180/math.pi;
+                      textControllerR2.text = _values[1].toString();
                       _values = [null, null, null, null];
                       // setup text controller for updating value as degree
                     }
                     if (calcPos == 2) {
-                      _values[2] = _values[3] *
-                          (1 / math.tan(_values[0] * math.pi / 180) -
-                              1 / math.tan(_values[1] * math.pi / 180));
-                      textControllerA.text = _values[2].toString();
-                      _values = [null, null, null, null];
-                    }
-                    if (calcPos == 3) {
-                      print('checkFunctionality b calc');
-                      print('type of [0] '+_values[0].runtimeType.toString());
-                      _values[3] = _values[2] /
-                          (1 / math.tan(_values[0] * math.pi / 180) -
-                              1 / math.tan(_values[1] * math.pi / 180));
-                      print('got calc result '+_values[3].toString());
-                      textControllerB.text = _values[3].toString();
+                      _values[2] =math.acos(math.tan(_values[0]*math.pi/180)/math.tan(_values[1]*math.pi/180))*180/math.pi;
+                      textControllerBeta.text = _values[2].toString();
                       _values = [null, null, null, null];
                     }
                   }
@@ -207,7 +192,7 @@ class _VisualizerState extends State<Visualizer> {
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
-                      controller: textControllerPhi,
+                      controller: textControllerR1,
                       // initialValue: null,
                       // obscureText: false,
                       // validator: (value) =>
@@ -219,7 +204,7 @@ class _VisualizerState extends State<Visualizer> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: "Phi",
+                        labelText: "r1",
                         labelStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -231,7 +216,7 @@ class _VisualizerState extends State<Visualizer> {
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
-                      controller: textControllerTheta,
+                      controller: textControllerR2,
                       // initialValue: null,
                       // obscureText: false,
                       // validator: (value) =>
@@ -243,7 +228,7 @@ class _VisualizerState extends State<Visualizer> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: "Theta",
+                        labelText: "r2",
                         labelStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -255,7 +240,7 @@ class _VisualizerState extends State<Visualizer> {
                   Container(
                     padding: EdgeInsets.all(10),
                     child: TextFormField(
-                      controller: textControllerA,
+                      controller: textControllerBeta,
                       // initialValue: null,
                       // obscureText: false,
                       // validator: (value) =>
@@ -267,7 +252,7 @@ class _VisualizerState extends State<Visualizer> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: "a",
+                        labelText: "beta",
                         labelStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
@@ -276,80 +261,12 @@ class _VisualizerState extends State<Visualizer> {
                       textAlign: TextAlign.left,
                     ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: TextFormField(
-                      controller: textControllerB,
-                      // initialValue: null,
-                      // obscureText: false,
-                      // validator: (value) =>
-                      //     value.isEmpty ? 'Enter your email' : null,
-                      onChanged: (val) {
-                        setState(() {
-                          _values[3] = double.parse(val);
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        labelText: "b",
-                        labelStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                  ),
+                  
                 ],
               ),
             ),
 
-            // inputBuilder(context,
-            //     title: 'phi',
-            //     value: null,
-            //     pos: 0,
-            //     textController: textControllerPhi),
-            // SizedBox(height: 5),
-            // inputBuilder(context,
-            //     title: 'Theta',
-            //     value: null,
-            //     pos: 0,
-            //     textController: textControllerTheta),
-            // SizedBox(height: 5),
-            // inputBuilder(context,
-            //     title: 'a',
-            //     value: null,
-            //     pos: 0,
-            //     textController: textControllerA),
-            // SizedBox(height: 5),
-            // inputBuilder(context,
-            //     title: 'b',
-            //     value: null,
-            //     pos: 0,
-            //     textController: textControllerB),
-            // SizedBox(height: 5),
-            // Center(
-            //   child: Padding(
-            //     padding: const EdgeInsets.symmetric(vertical: 15.0),
-            //     child: InkWell(
-            //       onTap: () => Navigator.push(context,
-            //           MaterialPageRoute(builder: (context) => ReadMore())),
-            //       child: RichText(
-            //         text: TextSpan(
-            //           text: 'Is it too confusing? ',
-            //           style: DefaultTextStyle.of(context).style,
-            //           children: <TextSpan>[
-            //             TextSpan(
-            //                 text: 'Read more.',
-            //                 style: TextStyle(
-            //                     fontWeight: FontWeight.bold,
-            //                     color: iconColor)),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            
           ],
         ),
       ),
@@ -395,95 +312,7 @@ class _VisualizerState extends State<Visualizer> {
     );
   }
 
-  // List<String> _currencyList = COMPANY;
-  String _chosenValue1;
-  // void displayModalBottomSheet(context, defaultvalue) {
-  //   showModalBottomSheet(
-  //       elevation: 10.0,
-  //       shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.only(
-  //         topLeft: Radius.circular(15),
-  //         topRight: Radius.circular(15),
-  //       )),
-  //       context: context,
-  //       builder: (BuildContext buildContext) {
-  //         return StatefulBuilder(
-  //           builder: (BuildContext context, setState) {
-  //             return Container(
-  //               height: heightOfScreen / 3.7,
-  //               child: Padding(
-  //                 padding: const EdgeInsets.all(8.0),
-  //                 child: Wrap(
-  //                   direction: Axis.horizontal,
-  //                   children: <Widget>[
-  //                     CustomDropDownbutton(
-  //                       dropDownButton: DropdownButton(
-  //                         value: defaultvalue,
-  //                         underline: Container(), // this is the magic
-  //                         items: _currencyList
-  //                             .map<DropdownMenuItem<String>>((String value) {
-  //                           return DropdownMenuItem<String>(
-  //                             value: value,
-  //                             child: Text(value),
-  //                           );
-  //                         }).toList(),
-  //                         onChanged: (value) {
-  //                           setState(() {
-  //                             defaultvalue = value;
-  //                           });
-  //                         },
-  //                         hint: defaultvalue != null
-  //                             ? Text(
-  //                                 " $defaultvalue",
-  //                               )
-  //                             : Text(
-  //                                 "$defaultvalue",
-  //                               ),
-  //                       ),
-  //                     ),
-  //                     CustomDropDownbutton(
-  //                       dropDownButton: DropdownButton(
-  //                         value: _chosenValue1,
-  //                         underline: Container(), // this is the magic
-  //                         items: _currencyList
-  //                             .map<DropdownMenuItem<String>>((String value) {
-  //                           return DropdownMenuItem<String>(
-  //                             value: value,
-  //                             child: Text(value),
-  //                           );
-  //                         }).toList(),
-  //                         hint: _chosenValue1 != null
-  //                             ? Text(
-  //                                 " $_chosenValue1",
-  //                               )
-  //                             : Text(
-  //                                 "Select currency.",
-  //                               ),
-  //                         onChanged: (value) {
-  //                           setState(() {
-  //                             _chosenValue1 = value;
-  //                           });
-  //                         },
-  //                       ),
-  //                     ),
-  //                     InputFieldButton(
-  //                       text: "Compare",
-  //                       onPressed: () => Navigator.push(
-  //                           context,
-  //                           MaterialPageRoute(
-  //                               builder: (context) => ComparisonGraph( //TODO: update it acc to new data format
-  //                                     symbol1: defaultvalue.toUpperCase(),
-  //                                     symbol2: _chosenValue1.toUpperCase(),
-  //                                   ))),
-  //                     )
-  //                   ],
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       });
-  // }
+  
 
   Stack photoStack({BuildContext context, String symbol}) {
     return Stack(
@@ -541,27 +370,4 @@ class GlobalAlertDialog {
   }
 }
 
-// class CustomDropDownbutton extends StatelessWidget {
-//   final DropdownButton dropDownButton;
 
-//   const CustomDropDownbutton({Key key, this.dropDownButton}) : super(key: key);
-//   @override
-//   Widget build(BuildContext context) {
-//     var width = MediaQuery.of(context).size.width;
-//     return Container(
-//       color: backgroundColor,
-//       child: Padding(
-//         padding: const EdgeInsets.all(8.0),
-//         child: Container(
-//           width: width / 0.5,
-//           padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-//           decoration: BoxDecoration(
-//               borderRadius: BorderRadius.circular(10.0),
-//               color: backgroundColor,
-//               border: Border.all()),
-//           child: DropdownButtonHideUnderline(child: dropDownButton),
-//         ),
-//       ),
-//     );
-//   }
-// }
