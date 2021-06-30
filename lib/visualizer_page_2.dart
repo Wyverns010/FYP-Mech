@@ -178,7 +178,7 @@ class _VisualizerState extends State<VisualizerUJM> {
               padding: const EdgeInsets.only(
                   left: 20, right: 20, top: 10.0, bottom: 10.0),
               child: Text(
-                'Input any three values: ',
+                'Input any two values: ',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,

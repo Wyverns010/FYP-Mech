@@ -19,7 +19,7 @@ class _VisualizerState extends State<Visualizer> {
   var widthOfScreen;
   String defaultImage = 'https://www.w3schools.com/w3css/img_lights.jpg';
   String imageURL;
-  // phi, theta, a, b
+  // phi, theta, c, b
   List<dynamic> _values = [null, null, null, null];
   var textControllerPhi = new TextEditingController();
   var textControllerTheta = new TextEditingController();
@@ -94,7 +94,7 @@ class _VisualizerState extends State<Visualizer> {
                     print('calcPos ' + calcPos.toString());
                     if (calcPos == 0) {
                       _values[0] = math.atan(1 /
-                          (_values[2] / _values[3] -
+                          (_values[2] / _values[3] +
                               1 / math.tan(_values[1] * math.pi / 180)))*180/math.pi;
                       textControllerPhi.text = _values[0].toString();
                       _values = [null, null, null, null];
@@ -103,7 +103,7 @@ class _VisualizerState extends State<Visualizer> {
                     if (calcPos == 1) {
                       _values[1] = math.atan(
                           1 / math.tan(_values[0] * math.pi / 180) -
-                              1 / (_values[2] / _values[3]))*180/math.pi;
+                              (_values[2] / _values[3]))*180/math.pi;
                       textControllerTheta.text = _values[1].toString();
                       _values = [null, null, null, null];
                       // setup text controller for updating value as degree
@@ -269,7 +269,7 @@ class _VisualizerState extends State<Visualizer> {
                       },
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        labelText: "a",
+                        labelText: "c",
                         labelStyle: TextStyle(
                             color: Colors.grey,
                             fontSize: 16,
