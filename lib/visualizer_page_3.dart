@@ -113,7 +113,7 @@ class _VisualizerState extends State<VisualizerFSCM> {
                     // }
                      if (calcPos == 3) {
                       _values[3] = _values[0]*(math.sin(_values[1]*math.pi/180) + math.sin(2*_values[1]*math.pi/180)/(2*_values[2]));
-                      textControllerVp.text = _values[2].toString();
+                      textControllerVp.text = _values[3].toString();
                       // _values = [null, null, null, null];
                       _values[3] = null;
                     }
