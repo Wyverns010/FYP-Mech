@@ -55,7 +55,7 @@ class MechanismsList extends StatelessWidget {
             child: Text(
               'Select an option to Begin',
               style: TextStyle(
-                fontSize: 30.0,
+                fontSize: 28.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
