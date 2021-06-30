@@ -91,13 +91,14 @@ class MechanismsList extends StatelessWidget {
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
                                     VisualizerUJM(mechName: headings[index], imageData: images[index], mechDetails: details[index])));
-                      } else {
-                        Navigator.of(context).push(
-                            // MaterialPageRoute(builder: (BuildContext context) => ARScene(nameModel: modelNames[index] ?? 'glasses11.sfb',))
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    Visualizer(mechName: headings[index], imageData: images[index], mechDetails: details[index])));
-                      }
+                      } 
+                      
+                      Navigator.of(context).push(
+                          // MaterialPageRoute(builder: (BuildContext context) => ARScene(nameModel: modelNames[index] ?? 'glasses11.sfb',))
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  Visualizer(mechName: headings[index], imageData: images[index], mechDetails: details[index])));
+                      
                     },
                   );
                 }),
