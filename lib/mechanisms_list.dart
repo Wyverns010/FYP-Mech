@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_project/visualizer_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fyp_project/visualizer_page_2.dart';
+import 'package:fyp_project/visualizer_page_3.dart';
 
 import 'login_page.dart';
 
@@ -11,8 +12,8 @@ class MechanismsList extends StatelessWidget {
   // this controls the backend data loading structure
   final List<String> modelNames = [
     'Steering gear mechanism (Ackerman’s)',
-    'Universal Joint Mechanism',
-    'Slider carnk mechanism',
+    'Universal Mechanism',
+    'Flexible Slider crank mechanism',
     'Swashplate mechanism',
     'Spring type operating mechanism'
   ];
@@ -21,10 +22,25 @@ class MechanismsList extends StatelessWidget {
   // this controls the UI
   final List<String> headings = [
     'Steering gear mechanism (Ackerman’s)',
-    'Universal Joint Mechanism',
-    'Slider carnk mechanism',
+    'Universal Mechanism',
+    'Flixible Slider crank mechanism',
     'Swashplate mechanism',
     'Spring type operating mechanism'
+  ];
+  final List<String> images = [
+    'assets/visualize.png',
+    'assets/universal_joint.jpg',
+    'assets/slider_crank.jpg',
+    'assets/visualize.png',
+    'assets/visualize.png'
+  ];
+
+  final List<String> details = [
+    'The steering gear mechanism is used for changing the direction of two or more of the wheel axles with reference to the chassis',
+    'The universal joint mechanism (Hooke’s coupling) transmits rotary motion while allowing for various relative angles and displacements between the driver and follower.',
+    'This mechanism involves the conversion of translation motion into rotary motion or translation motion into rotary motion',
+    'A swashplate mechanism controls the cyclic and collective pitch of the rotor blades. The cyclic pitch of the rotor blades is used to change a helicopter’s roll and pitch.',
+    'It involves the concept of energy stored in the springs and that can be utilized for different work applications. Springs are used to absorb energy and restore it slowly or rapidly'
   ];
 
   Widget build(BuildContext context) {
@@ -62,18 +78,25 @@ class MechanismsList extends StatelessWidget {
                       ),
                     ),
                     onTap: () {
+                      if (index == 2) {
+                        Navigator.of(context).push(
+                            // MaterialPageRoute(builder: (BuildContext context) => ARScene(nameModel: modelNames[index] ?? 'glasses11.sfb',))
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    VisualizerFSCM(mechName: headings[index], imageData: images[index], mechDetails: details[index])));
+                      }
                       if (index == 1) {
                         Navigator.of(context).push(
                             // MaterialPageRoute(builder: (BuildContext context) => ARScene(nameModel: modelNames[index] ?? 'glasses11.sfb',))
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    VisualizerUJM(mechName: headings[index])));
+                                    VisualizerUJM(mechName: headings[index], imageData: images[index], mechDetails: details[index])));
                       } else {
                         Navigator.of(context).push(
                             // MaterialPageRoute(builder: (BuildContext context) => ARScene(nameModel: modelNames[index] ?? 'glasses11.sfb',))
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    Visualizer(mechName: headings[index])));
+                                    Visualizer(mechName: headings[index], imageData: images[index], mechDetails: details[index])));
                       }
                     },
                   );

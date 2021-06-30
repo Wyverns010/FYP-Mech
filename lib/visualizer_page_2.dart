@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 class VisualizerUJM extends StatefulWidget {
   final String mechName;
   final String imageData;
+  final String mechDetails;
 
-  VisualizerUJM({@required this.mechName, this.imageData});
+  VisualizerUJM({@required this.mechName, this.imageData, this.mechDetails});
 
   @override
   _VisualizerState createState() => _VisualizerState();
@@ -61,7 +62,7 @@ class _VisualizerState extends State<VisualizerUJM> {
                     // Placeholder()
                     Center(
                   child: Image.asset(
-                    'assets/visualize.png',
+                    widget.imageData !=null ? widget.imageData: 'assets/visualize.png',
                     // width: 200,
                     // height: 200,
                     fit: BoxFit.contain,
@@ -79,7 +80,7 @@ class _VisualizerState extends State<VisualizerUJM> {
                 onPressed: () {
                   print('listValues ' + _values.toString());
                   int count = 0;
-                  int calcPos = 3;
+                  int calcPos = 2;
                   for (int i = 0; i < 3; i++) {
                     if (_values[i] == null) {
                       count += 1;
@@ -89,7 +90,7 @@ class _VisualizerState extends State<VisualizerUJM> {
                   print('checkFunctionality ' + (2).toString());
                   if (count > 1) {
                     GlobalAlertDialog.dialogBox(context, 'Warning!',
-                        'Please fill any three values to visualize');
+                        'Please fill any two values to visualize');
                   } else {
                     print('calcPos ' + calcPos.toString());
                     if (calcPos == 0) {
@@ -168,7 +169,8 @@ class _VisualizerState extends State<VisualizerUJM> {
                       onPressed: () => GlobalAlertDialog.dialogBox(
                           context,
                           widget.mechName,
-                          'The steering gear mechanism is used for changing the direction of two or more of the wheel axles with reference to the chassis')),
+                          widget.mechDetails != null ? widget.mechDetails
+                          : 'The steering gear mechanism is used for changing the direction of two or more of the wheel axles with reference to the chassis')),
                 ),
               ),
             ),
